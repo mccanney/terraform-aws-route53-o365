@@ -3,18 +3,18 @@ data "aws_route53_zone" "selected" {
 }
 
 data "template_file" "mx_record" {
-    template = "10 ${replace("${data.aws_route53_zone.selected.name}", ".", "-")}.mail.protection.outlook.com"
+    template = "10 ${replace("${var.domain}", ".", "-")}.mail.protection.outlook.com"
 }
 
-##########
-# Exchange
-##########
+#################
+# Exchange Online
+#################
 
 resource "aws_route53_record" "mx" {
     count   = "${var.enable_exchange ? 1 : 0}"
 
     zone_id = "${data.aws_route53_zone.selected.zone_id}"
-    name    = "@"
+    name    = ""
     records = ["${data.template_file.mx_record.rendered}"]
     type    = "MX"
     ttl     = "${var.ttl}"
@@ -34,8 +34,8 @@ resource "aws_route53_record" "spf" {
     count   = "${var.enable_exchange ? 1 : 0}"
 
     zone_id = "${data.aws_route53_zone.selected.zone_id}"
-    name    = "@"
-    records = ["v=spf1 include:spf.protection.outlook.com -all"]
+    name    = ""
+    records = ["MS=${var.ms_txt}","v=spf1 include:spf.protection.outlook.com -all"]
     type    = "TXT"
     ttl     = "${var.ttl}"
 }

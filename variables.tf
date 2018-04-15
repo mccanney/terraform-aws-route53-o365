@@ -1,6 +1,16 @@
 variable "domain" {
     description = "The name of the domain to create Office365 DNS records"
-    default     = "test.com"
+    default     = ""
+}
+
+variable "ttl" {
+    description = "The time-to-live value for the DNS record"
+    default     = "3600"
+}
+
+variable "ms_txt" {
+    description = "The value of the MS= TXT record Office365 requires to prove domain ownership"
+    default     = ""
 }
 
 variable "enable_exchange" {
