@@ -18,7 +18,7 @@ jobs:
           command: terraform init -input=false tests/integration
       - run:
           name: Run terraform plan
-          command: terraform plan -out=tfplan -input=false -var 'region=us-east-1'
+          command: terraform plan -out=tfplan -input=false tests/integration
       - persist_to_workspace:
           root: .
           paths:
