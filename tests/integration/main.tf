@@ -16,4 +16,6 @@ module "terraform-aws-office365" {
     enable_exchange = true
     enable_sfb      = true
     enable_mdm      = true
+
+    depends_on     = ["${aws_route_zone.test_zone}"]
 }
