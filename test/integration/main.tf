@@ -5,7 +5,7 @@ provider "aws" {
 
 resource "aws_route53_zone" "test_zone" {
     name              = "${var.domain}"
-    comment           = "Route53 DNS zone for tiguard.technology"
+    comment           = "Route53 DNS zone for ${var.domain}"
     delegation_set_id = "${var.delegation_id}"
 }
 
