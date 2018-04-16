@@ -1,5 +1,5 @@
 variable "domain" {
-    description = "The name of the domain to create Office365 DNS records"
+    description = "The name of the domain to create Office365 DNS records in"
     default     = ""
 }
 
@@ -9,7 +9,7 @@ variable "ttl" {
 }
 
 variable "ms_txt" {
-    description = "The value of the MS= TXT record Office365 requires to prove domain ownership"
+    description = "The value of the MS=mxXYZ TXT record Office365 requires to prove domain ownership"
     default     = ""
 }
 
