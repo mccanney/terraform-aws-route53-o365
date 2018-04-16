@@ -3,10 +3,9 @@ variable "domain" {
     default     = ""
 }
 
-variable "depends_on" { 
-    description = "Variable to implement pseudo-depends_on"
-    type        = "list"
-    default     = []
+variable "zone_id" { 
+    description = "The Zone ID of the Route53 DNS zone"
+    default     = ""
 }
 
 variable "ttl" {
