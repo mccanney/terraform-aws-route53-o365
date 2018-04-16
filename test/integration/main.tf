@@ -15,7 +15,4 @@ module "route53-o365" {
     domain          = "${var.domain}"
     zone_id         = "${aws_route53_zone.test_zone.zone_id}"
     ms_txt          = "ms12345678"
-    enable_exchange = true
-    enable_sfb      = true
-    enable_mdm      = true
 }

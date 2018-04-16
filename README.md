@@ -15,11 +15,15 @@ module "route53_o365" {
     domain          = "example.com"
     zone_id         = "${data.aws_route53_zone.zone_name.zone_id}"
     ms_txt          = "ms12345678"
-    enable_exchange = true
-    enable_sfb      = true
-    enable_mdm      = true
+    enable_mdm      = false
 }
 ```
+
+* `enable_exchange` creates the required DNS records for Exchange Online.
+* `enable_sfb` creates the required DNS records for Skype for Business.
+* `enable_mdm` creates the required DNS for Mobile Device Management.
+
+By default, all DNS records are created.
 
 ## Examples
 

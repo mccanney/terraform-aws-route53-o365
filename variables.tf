@@ -20,15 +20,15 @@ variable "ms_txt" {
 
 variable "enable_exchange" {
     description = "Controls if the DNS records for Exchange Online should be created."
-    default     = false
+    default     = true
 }
 
 variable "enable_sfb" {
     description = "Controls if the DNS records for Skype for Business should be created."
-    default     = false
+    default     = true
 }
 
 variable "enable_mdm" {
     description = "Controls if the DNS records for Mobile Device Management should be created."
-    default     = false
+    default     = true
 }
