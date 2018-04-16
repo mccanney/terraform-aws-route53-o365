@@ -3,6 +3,12 @@ variable "domain" {
     default     = ""
 }
 
+variable "depends_on" { 
+    description = "Variable to implement pseudo-depends_on"
+    type        = "list"
+    default     = []
+}
+
 variable "ttl" {
     description = "The time-to-live value for the DNS record"
     default     = "3600"
