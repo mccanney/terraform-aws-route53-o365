@@ -1,8 +1,8 @@
 # AWS Office 365 Route53 Terraform Module
 
-[![CircleCI](https://circleci.com/gh/tiguard/terraform-aws-office365.svg?style=shield)](https://circleci.com/gh/tiguard/terraform-aws-office365)
-[![GitHub release](https://img.shields.io/github/release/tiguard/terraform-aws-office365.svg?style=flat-square)](https://github.com/tiguard/terraform-aws-office365)
-[![license](https://img.shields.io/github/license/tiguard/terraform-aws-office365.svg?style=flat-square)](https://github.com/tiguard/terraform-aws-office365/blob/master/LICENSE.md)
+[![CircleCI](https://circleci.com/gh/tiguard/terraform-aws-route53-o365.svg?style=shield)](https://circleci.com/gh/tiguard/terraform-aws-route53-o365)
+[![GitHub release](https://img.shields.io/github/release/tiguard/terraform-aws-route53-o365.svg?style=flat-square)](https://github.com/tiguard/terraform-aws-route53-o365)
+[![license](https://img.shields.io/github/license/tiguard/terraform-aws-route53-o365.svg?style=flat-square)](https://github.com/tiguard/terraform-aws-route53-o365/blob/master/LICENSE.md)
 
 A terraform module which creates, in AWS Route53, the [DNS records](https://support.office.com/article/External-Domain-Name-System-records-for-Office-365-c0531a6f-9e25-4f2d-ad0e-a70bfef09ac0) required by Office 365.
 
