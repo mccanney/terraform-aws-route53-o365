@@ -1,0 +1,30 @@
+{
+    "Comment": "Change the nameserver and SOA records",
+    "Changes": [
+        {
+            "Action": "UPSERT",
+            "ResourceRecordSet": {
+                "Name": "tiguard.technology",
+                "Type": "NS",
+                "ResourceRecords": [
+                    {"Value": "ns-869.awsdns-44.net."},
+                    {"Value": "ns-1602.awsdns-08.co.uk."},
+                    {"Value": "ns-25.awsdns-03.com."},
+                    {"Value": "ns-1263.awsdns-29.org."}
+                ],
+                "TTL": 172800
+            }
+        },
+        {
+            "Action": "UPSERT",
+            "ResourceRecordSet": {
+                "Name": "tiguard.technology",
+                "Type": "SOA",
+                "ResourceRecords": [
+                    {"Value": "ns-869.awsdns-44.net. hostmaster.tiguard.technology. 1 7200 900 1209600 86400"}
+                ],
+                "TTL": 900
+            }
+        }
+    ]
+}
