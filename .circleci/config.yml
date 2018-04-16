@@ -15,7 +15,7 @@ jobs:
           command: ./tflint --deep --aws-region us-east-1
       - run:
           name: Run terraform init
-          command: terraform init tests/integration -input=false
+          command: terraform init -input=false tests/integration
       - run:
           name: Run terraform plan
           command: terraform plan -out=tfplan -input=false
