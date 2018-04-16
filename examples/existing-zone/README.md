@@ -1,4 +1,4 @@
-# Using the module with an existing Route53 zone
+# Usage with an existing Route53 hosted zone
 
 If you already have a Route53 hosted zone for the domain, the `aws_route53_zone` data source should be used to find the zone ID.
 

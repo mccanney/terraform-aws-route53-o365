@@ -13,7 +13,7 @@ module "route53_o365" {
     source = "tiguard/route53-o365/aws"
 
     domain          = "example.com"
-    zone_id         = "${aws_route53_zone.zone_name.zone_id}"
+    zone_id         = "${data.aws_route53_zone.zone_name.zone_id}"
     ms_txt          = "ms12345678"
     enable_exchange = true
     enable_sfb      = true

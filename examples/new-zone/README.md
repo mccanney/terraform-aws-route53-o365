@@ -1,6 +1,6 @@
-# Using the module with a new Route53 zone
+# Usage with a new Route53 hosted zone
 
-If you're creating a new Route53 hosted zone for the domain, the `aws_route53_zone` resource can pass the new zone ID to the module.
+If you're creating a new Route53 hosted zone for the domain, the `aws_route53_zone` resource should pass the new zone ID to the module.
 
 ```hcl
 resource "aws_route53_zone" "zone" {
