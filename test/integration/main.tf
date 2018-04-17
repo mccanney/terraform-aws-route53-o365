@@ -3,6 +3,15 @@ provider "aws" {
     region  = "${var.region}"
 }
 
+terraform {
+    backend "s3" {
+      bucket  = "terraform-remote-state-bucket-s3"
+      key     = "tiguard.technology/terraform.tfstate"
+      region  = "eu-west-2"
+      encrypt = true
+    }
+}
+
 resource "aws_route53_zone" "test_zone" {
     name              = "${var.domain}"
     comment           = "Route53 DNS zone for ${var.domain}"

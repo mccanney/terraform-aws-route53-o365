@@ -34,19 +34,17 @@ jobs:
       - run:
           name: Update registrar NS records
           command: /bin/bash test/integration/scripts/reg.sh
-      - persist_to_workspace:
-          root: .
-          paths:
-            - terraform.tfstate
   destroy:
     docker:
       - image: hashicorp/terraform:light
     steps:
-      - attach_workspace:
-          at: .
+      - checkout
+      - run:
+          name: Run terraform init
+          command: terraform init -input=false test/integration
       - run:
           name: Run terraform destroy
-          command: terraform destroy -auto-approve
+          command: terraform destroy -auto-approve test/integration
 workflows:
   version: 2
   build_and_destroy:
