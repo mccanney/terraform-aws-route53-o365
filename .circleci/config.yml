@@ -25,3 +25,33 @@ jobs:
       - run:
           name: Run terraform plan
           command: terraform plan -out=tfplan -input=false test/integration
+      - run:
+          name: Run terraform apply
+          command: terraform apply tfplan
+      - run:
+          name: Update NS and SOA records
+          command: /bin/bash test/integration/scripts/ns.sh
+      - run:
+          name: Update registrar NS records
+          command: /bin/bash test/integration/scripts/reg.sh
+      - persist_to_workspace:
+          root: .
+          paths:
+            - terraform.tfstate
+  destroy:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run terraform destroy
+          command: terraform destroy -auto-approve
+workflows:
+  version: 2
+  build_and_destroy:
+    jobs:
+      - build
+      - destroy:
+          requires:
+            - build

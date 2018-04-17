@@ -17,3 +17,5 @@ module "route53_o365" {
     enable_mdm      = false
 }
 ```
+
+This example also disables creating the DNS records for Skype for Business and Mobile Device Management.

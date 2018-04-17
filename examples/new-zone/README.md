@@ -15,3 +15,5 @@ module "route53_o365" {
     ms_txt          = "ms12345678"
 }
 ```
+
+This example creates all Office 365 DNS records for the domain.
