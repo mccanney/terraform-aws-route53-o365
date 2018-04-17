@@ -10,5 +10,5 @@ if [[ $NS =~ $REGEX ]]; then
 	echo "Nameservers are already set"
 	exit 0
 else
-	aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch file://../nameservers.json
+	aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch file://test/integration/nameservers.json
 fi

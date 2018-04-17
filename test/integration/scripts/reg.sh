@@ -10,5 +10,5 @@ if [[ $SOA =~ $REGEX ]]; then
 	echo "SOA is already set"
 	exit 0
 else
-	aws route53domains --region us-east-1 update-domain-nameservers --cli-input-json file://../registrar.json
+	aws route53domains --region us-east-1 update-domain-nameservers --cli-input-json file://test/integration/registrar.json
 fi
