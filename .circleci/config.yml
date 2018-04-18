@@ -40,7 +40,7 @@ jobs:
     steps:
       - run:
           name: Install dependencies
-          command: apk add --update bash bind-tools git
+          command: apk add --update bash bind-tools git ssh
       - checkout
       - run:
           name: Test DNS records
