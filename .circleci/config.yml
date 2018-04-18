@@ -34,6 +34,16 @@ jobs:
       - run:
           name: Update registrar NS records
           command: /bin/bash test/integration/scripts/reg.sh
+  test:
+    docker:
+      - image: gliderlabs/alpine:latest
+    steps:
+      - run:
+          name: Install dependencies
+          command: apk add --update bash bind-tools
+      - run:
+          name: Test DNS records
+          command: /bin/bash test/integration/scripts/test.sh
   destroy:
     docker:
       - image: hashicorp/terraform:light
@@ -47,9 +57,12 @@ jobs:
           command: terraform destroy -auto-approve test/integration
 workflows:
   version: 2
-  build_and_destroy:
+  build_test_destroy:
     jobs:
       - build
-      - destroy:
+      - test:
           requires:
             - build
+      - destroy:
+          requires:
+            - test
