@@ -41,7 +41,7 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: apk add --update bash bind-tools
+          command: apk add --update bash bind-tools git
       - run:
           name: Test DNS records
           command: /bin/bash test/integration/scripts/test.sh

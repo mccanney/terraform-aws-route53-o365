@@ -64,7 +64,7 @@ resource "aws_route53_record" "sip" {
     ttl     = "${var.ttl}"
 }
 
-resource "aws_route53_record" "sipdir" {
+resource "aws_route53_record" "sipfed" {
     count   = "${var.enable_sfb ? 1 : 0}"
 
     zone_id = "${var.zone_id}"
@@ -74,7 +74,7 @@ resource "aws_route53_record" "sipdir" {
     ttl     = "${var.ttl}"
 }
 
-resource "aws_route53_record" "sipfed" {
+resource "aws_route53_record" "sipdir" {
     count   = "${var.enable_sfb ? 1 : 0}"
 
     zone_id = "${var.zone_id}"

@@ -2,19 +2,99 @@
 
 export DOMAIN="tiguard.technology"
 export NS="8.8.8.8"
-export MX_RECORD=$(nslookup -type=mx $DOMAIN - $NS | grep -E "\.mail\.protection\.outlook\.com\.$")
-export MAIL_AUTO=$(nslookup -type=cname autodiscover.$DOMAIN - $NS | grep -E "autodiscover\.outlook\.com\.$")
+export O365_MS=$(nslookup -type=txt $DOMAIN - $NS | grep -E "MS=ms.{9}$")
+export EXCH_MX=$(nslookup -type=mx $DOMAIN - $NS | grep -E "\.mail\.protection\.outlook\.com\.$")
+export EXCH_AUTO=$(nslookup -type=cname autodiscover.$DOMAIN - $NS | grep -E "autodiscover\.outlook\.com\.$")
+export EXCH_SPF=$(nslookup -type=txt $DOMAIN - $NS | grep -E ".*protection\.outlook\.com..all.$")
+export SFB_DIS=$(nslookup -type=cname lyncdiscover.$DOMAIN - $NS | grep -E "webdir\.online\.lync\.com\.$")
+export SFB_SIP=$(nslookup -type=cname sip.$DOMAIN - $NS | grep -E "sipdir\.online\.lync\.com\.$")
+export SFB_SIPDIR=$(nslookup -type=srv _sipfederationtls._tcp.$DOMAIN - $NS | grep -E "100.1.5061.sipfed\.online\.lync\.com\.$")
+export SFB_SIPFED=$(nslookup -type=srv _sip._tls.$DOMAIN - $NS | grep -E "100.1.443.sipdir\.online\.lync\.com\.$")
+export MDM_REG=$(nslookup -type=cname enterpriseregistration.$DOMAIN - $NS | grep -E "enterpriseregistration\.windows.net\.$")
+export MDM_ENROL=$(nslookup -type=cname enterpriseenrollment.$DOMAIN - $NS | grep -E "enterpriseenrollment\.manage\.microsoft\.com\.$")
 
-if [ -n "$MX_RECORD" ]; then
+###################
+# Office 365 MS TXT
+###################
+
+if [ -n "$O365_MS" ]; then
+    echo "The MS TXT record is set correctly."
+else
+    echo "The MS TXT record is not set correctly."
+    exit 1
+fi
+
+#############################
+# Exchange Online DNS records
+#############################
+
+if [ -n "$EXCH_MX" ]; then
     echo "The MX record is set correctly."
 else
     echo "The MX record is not set correctly."
     exit 1
 fi
 
-if [ -n "$MAIL_AUTO" ]; then
+if [ -n "$EXCH_AUTO" ]; then
     echo "The e-mail autodiscover record is set correctly."
 else
     echo "The e-mail autodiscover record is not set correctly."
+    exit 1
+fi
+
+if [ -n "$EXCH_SPF" ]; then
+    echo "The SPF record is set correctly."
+else
+    echo "The SPF record is not set correctly."
+    exit 1
+fi
+
+################################
+# Skype for Business DNS records
+################################
+
+if [ -n "$SFB_DIS" ]; then
+    echo "The SFB discovery record is set correctly."
+else
+    echo "The SFB discovery record is not set correctly."
+    exit 1
+fi
+
+if [ -n "$SFB_SIP" ]; then
+    echo "The SFB sip record is set correctly."
+else
+    echo "The SFB sip record is not set correctly."
+    exit 1
+fi
+
+if [ -n "$SFB_SIPDIR" ]; then
+    echo "The SFB service record is set correctly."
+else
+    echo "The SFB service record is not set correctly."
+    exit 1
+fi
+
+if [ -n "$SFB_SIPFED" ]; then
+    echo "The SFB federation record is set correctly."
+else
+    echo "The SFB federation record is not set correctly."
+    exit 1
+fi
+
+######################################
+# Mobile Device Management DNS records
+######################################
+
+if [ -n "$MDM_REG" ]; then
+    echo "The MDM registration record is set correctly."
+else
+    echo "The MDM registration is not set correctly."
+    exit 1
+fi
+
+if [ -n "$MDM_ENROL" ]; then
+    echo "The MDM enrollment record is set correctly."
+else
+    echo "The MDM enrollment record is not set correctly."
     exit 1
 fi
