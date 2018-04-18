@@ -38,10 +38,10 @@ jobs:
     docker:
       - image: gliderlabs/alpine:latest
     steps:
-      - checkout
       - run:
           name: Install dependencies
           command: apk add --update bash bind-tools git
+      - checkout
       - run:
           name: Test DNS records
           command: /bin/bash test/integration/scripts/test.sh
