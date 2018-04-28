@@ -9,8 +9,16 @@ data "template_file" "domain_guid" {
 locals {
     o365_mx   = "10 ${data.template_file.domain_guid.rendered}.mail.protection.outlook.com"
     o365_spf  = "v=spf1 include:spf.protection.outlook.com -all"
-    dkim_sel1 = "selector1-${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
-    dkim_sel2 = "selector2-${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
+    dkim = [
+        {
+            name  = "selector1._domainkey.${var.domain}"
+            value = "selector1-${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
+        },
+        {
+            name  = "selector2._domainkey.${var.domain}"
+            value = "selector2-${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
+        },
+    ]
 }
 
 #################
@@ -57,22 +65,12 @@ resource "aws_route53_record" "dmarc" {
     ttl     = "${var.ttl}"
 }
 
-resource "aws_route53_record" "dkim1" {
-    count   = "${var.enable_dkim ? 1 : 0}"
+resource "aws_route53_record" "dkim" {
+    count   = "${var.enable_dkim ? length(local.dkim) : 0}"
 
     zone_id = "${var.zone_id}"
-    name    = "selector1._domainkey.${var.domain}"
-    records = ["${local.dkim_sel1}"]
-    type    = "CNAME"
-    ttl     = "${var.ttl}"
-}
-
-resource "aws_route53_record" "dkim2" {
-    count   = "${var.enable_dkim ? 1 : 0}"
-
-    zone_id = "${var.zone_id}"
-    name    = "selector2._domainkey.${var.domain}"
-    records = ["${local.dkim_sel2}"]
+    name    = "${lookup(local.dkim[count.index], "name")}"
+    records = ["${lookup(local.dkim[count.index], "value")}"]
     type    = "CNAME"
     ttl     = "${var.ttl}"
 }

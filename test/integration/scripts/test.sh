@@ -52,10 +52,17 @@ else
     exit 1
 fi
 
-if [ -n "$EXCH_DKIM1" ] && [ -n "$EXCH_DKIM2" ]; then
-    echo "The DKIM records are set correctly."
+if [ -n "$EXCH_DKIM1" ]; then
+    echo "The DKIM1 record is set correctly."
 else
-    echo "The DKIM records are not set correctly."
+    echo "The DKIM1 record is not set correctly."
+    exit 1
+fi
+
+if [ -n "$EXCH_DKIM2" ]; then
+    echo "The DKIM2 record is set correctly."
+else
+    echo "The DKIM2 record is not set correctly."
     exit 1
 fi
 
