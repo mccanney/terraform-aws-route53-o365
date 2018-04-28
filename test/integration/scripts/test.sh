@@ -52,26 +52,26 @@ else
     exit 1
 fi
 
-if [ -n "$EXCH_DKIM1" ]; then
-    echo "The DKIM1 record is set correctly."
-else
-    echo "The DKIM1 record is not set correctly."
-    exit 1
-fi
-
-if [ -n "$EXCH_DKIM2" ]; then
-    echo "The DKIM2 record is set correctly."
-else
-    echo "The DKIM2 record is not set correctly."
-    exit 1
-fi
-
-if [ -n "$EXCH_DMARC" ]; then
-    echo "The DMARC record is set correctly."
-else
-    echo "The DMARC record is not set correctly."
-    exit 1
-fi
+#if [ -n "$EXCH_DKIM1" ]; then
+#    echo "The DKIM1 record is set correctly."
+#else
+#    echo "The DKIM1 record is not set correctly."
+#    exit 1
+#fi
+#
+#if [ -n "$EXCH_DKIM2" ]; then
+#    echo "The DKIM2 record is set correctly."
+#else
+#    echo "The DKIM2 record is not set correctly."
+#    exit 1
+#fi
+#
+#if [ -n "$EXCH_DMARC" ]; then
+#    echo "The DMARC record is set correctly."
+#else
+#    echo "The DMARC record is not set correctly."
+#    exit 1
+#fi
 
 ################################
 # Skype for Business DNS records

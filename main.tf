@@ -9,14 +9,15 @@ data "template_file" "domain_guid" {
 locals {
     o365_mx   = "10 ${data.template_file.domain_guid.rendered}.mail.protection.outlook.com"
     o365_spf  = "v=spf1 include:spf.protection.outlook.com -all"
+    dkim_dom  = "${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
     dkim = [
         {
             name  = "selector1._domainkey.${var.domain}"
-            value = "selector1-${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
+            value = "selector1-${local.dkim_dom}"
         },
         {
             name  = "selector2._domainkey.${var.domain}"
-            value = "selector2-${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
+            value = "selector2-${local.dkim_dom}"
         },
     ]
 }
@@ -46,7 +47,7 @@ resource "aws_route53_record" "autodiscover" {
 }
 
 resource "aws_route53_record" "spf" {
-    count   = "${var.enable_exchange && !var.enable_dmarc ? 1 : 0}"
+    count   = "${var.enable_exchange ? 1 : 0}"
 
     zone_id = "${var.zone_id}"
     name    = ""
@@ -59,8 +60,8 @@ resource "aws_route53_record" "dmarc" {
     count   = "${var.enable_exchange && var.enable_dmarc ? 1 : 0}"
 
     zone_id = "${var.zone_id}"
-    name    = ""
-    records = ["MS=${var.ms_txt}","${local.o365_spf}","${var.dmarc_record}"]
+    name    = "_dmarc"
+    records = ["${var.dmarc_record}"]
     type    = "TXT"
     ttl     = "${var.ttl}"
 }
