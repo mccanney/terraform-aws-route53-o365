@@ -32,3 +32,23 @@ variable "enable_mdm" {
     description = "Controls if the DNS records for Mobile Device Management should be created."
     default     = true
 }
+
+variable "enable_dkim" {
+    description = "Controls if the DNS records for DKIM should be created."
+    default     = false
+}
+
+variable "tenant_name" {
+    description = "The Office 365 tenant name."
+    default     = ""
+}
+
+variable "enable_dmarc" {
+    description = "Controls if the DNS record for DMARC should be created."
+    default     = false
+}
+
+variable "dmarc_record" {
+    description = "The value of the DMARC record."
+    default     = ""
+}

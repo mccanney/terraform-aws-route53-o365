@@ -21,7 +21,11 @@ resource "aws_route53_zone" "test_zone" {
 module "route53-o365" {
     source = "../.."
 
-    domain          = "${var.domain}"
-    zone_id         = "${aws_route53_zone.test_zone.zone_id}"
-    ms_txt          = "ms12345678"
+    domain       = "${var.domain}"
+    zone_id      = "${aws_route53_zone.test_zone.zone_id}"
+    ms_txt       = "ms12345678"
+    enable_dkim  = true
+    enable_dmarc = true
+    dmarc_record = "v=DMARC1; p=none; rua=mailto:dmarc@tiguard.technology; ruf=mailto:dmarc@tiguard.technology"
+    tenant_name  = "tiguard"
 }

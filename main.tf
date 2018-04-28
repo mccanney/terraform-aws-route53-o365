@@ -2,8 +2,15 @@ provider "template" {
     version = "~> 1.0"
 }
 
-data "template_file" "mx_record" {
-    template = "10 ${replace("${var.domain}", ".", "-")}.mail.protection.outlook.com"
+data "template_file" "domain_guid" {
+    template = "${replace("${var.domain}", ".", "-")}"
+}
+
+locals {
+    o365_mx   = "10 ${data.template_file.domain_guid.rendered}.mail.protection.outlook.com"
+    o365_spf  = "v=spf1 include:spf.protection.outlook.com -all"
+    dkim_sel1 = "selector1-${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
+    dkim_sel2 = "selector2-${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
 }
 
 #################
@@ -15,7 +22,7 @@ resource "aws_route53_record" "mx" {
 
     zone_id = "${var.zone_id}"
     name    = ""
-    records = ["${data.template_file.mx_record.rendered}"]
+    records = ["${local.o365_mx}"]
     type    = "MX"
     ttl     = "${var.ttl}"
 }
@@ -31,12 +38,42 @@ resource "aws_route53_record" "autodiscover" {
 }
 
 resource "aws_route53_record" "spf" {
-    count   = "${var.enable_exchange ? 1 : 0}"
+    count   = "${var.enable_exchange && !var.enable_dmarc ? 1 : 0}"
 
     zone_id = "${var.zone_id}"
     name    = ""
-    records = ["MS=${var.ms_txt}","v=spf1 include:spf.protection.outlook.com -all"]
+    records = ["MS=${var.ms_txt}","${local.o365_spf}"]
     type    = "TXT"
+    ttl     = "${var.ttl}"
+}
+
+resource "aws_route53_record" "dmarc" {
+    count   = "${var.enable_exchange && var.enable_dmarc ? 1 : 0}"
+
+    zone_id = "${var.zone_id}"
+    name    = ""
+    records = ["MS=${var.ms_txt}","${local.o365_spf}","${var.dmarc_record}"]
+    type    = "TXT"
+    ttl     = "${var.ttl}"
+}
+
+resource "aws_route53_record" "dkim1" {
+    count   = "${var.enable_dkim ? 1 : 0}"
+
+    zone_id = "${var.zone_id}"
+    name    = "selector1._domainkey.${var.domain}"
+    records = ["${local.dkim_sel1}"]
+    type    = "CNAME"
+    ttl     = "${var.ttl}"
+}
+
+resource "aws_route53_record" "dkim2" {
+    count   = "${var.enable_dkim ? 1 : 0}"
+
+    zone_id = "${var.zone_id}"
+    name    = "selector2._domainkey.${var.domain}"
+    records = ["${local.dkim_sel2}"]
+    type    = "CNAME"
     ttl     = "${var.ttl}"
 }
 
