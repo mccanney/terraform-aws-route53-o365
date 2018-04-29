@@ -18,19 +18,24 @@ module "route53_o365" {
     enable_exchange = false
     enable_sfb      = false
     enable_mdm      = false
+    enable_dkim     = false
+    enable_dmarc    = false
 }
 ```
 
 * `enable_exchange` controls whether the required DNS records for Exchange Online should be created or not.
 * `enable_sfb` controls whether the required DNS records for Skype for Business should be created or not.
 * `enable_mdm` controls whether the DNS for Mobile Device Management should be created or not.
+* `enable_dkim` controls whether the required DNS records for DKIM signing for the custom domain should be created or not.
+* `enable_dmarc` controls whether a DMARC DNS record for the custom domain should be created or not.
 
-By default, all DNS records are set to `true`.
+By default, all DNS records for Exchange Online, Skype for Business and MDM are set to `true`, DKIM and DMARC are set to `false`.
 
 ## Examples
 
 * [Usage with new zone](examples/new-zone/README.md)
 * [Usage with existing zone](examples/existing-zone/README.md)
+* [DKIM & DMARC usage](examples/dkim-dmarc/README.md)
 
 ## Contributing
 

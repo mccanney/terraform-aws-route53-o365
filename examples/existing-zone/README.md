@@ -10,11 +10,11 @@ data "aws_route53_zone" "zone" {
 module "route53_o365" {
     source = "tiguard/route53-o365/aws"
 
-    domain          = "example.com"
-    zone_id         = "${data.aws_route53_zone.zone.zone_id}"
-    ms_txt          = "ms12345678"
-    enable_sfb      = false
-    enable_mdm      = false
+    domain     = "example.com"
+    zone_id    = "${data.aws_route53_zone.zone.zone_id}"
+    ms_txt     = "ms12345678"
+    enable_sfb = false
+    enable_mdm = false
 }
 ```
 

@@ -6,9 +6,9 @@ export O365_MS=$(nslookup -type=txt $DOMAIN - $NS | grep -E "MS=ms.{9}$")
 export EXCH_MX=$(nslookup -type=mx $DOMAIN - $NS | grep -E "\.mail\.protection\.outlook\.com\.$")
 export EXCH_AUTO=$(nslookup -type=cname autodiscover.$DOMAIN - $NS | grep -E "autodiscover\.outlook\.com\.$")
 export EXCH_SPF=$(nslookup -type=txt $DOMAIN - $NS | grep -E ".*protection\.outlook\.com..all.$")
-export EXCH_DKIM1=$(nslookup -type=cname selector1._domainkey.$DOMAIN - $NS | grep -E "^selector1-.*\._domainkey\..*\.onmicrosoft\.com\.$")
-export EXCH_DKIM2=$(nslookup -type=cname selector2._domainkey.$DOMAIN - $NS | grep -E "^selector2-.*\._domainkey\..*\.onmicrosoft\.com\.$")
-export EXCH_DMARC=$(nslookup -type=txt $DOMAIN - $NS | grep -E "^v=DMARC1.*")
+export EXCH_DKIM1=$(nslookup -type=cname selector1._domainkey.$DOMAIN - $NS | grep -E "^selector1-.*_domainkey.*\.onmicrosoft\.com\.$")
+export EXCH_DKIM2=$(nslookup -type=cname selector2._domainkey.$DOMAIN - $NS | grep -E "^selector2-.*_domainkey.*\.onmicrosoft\.com\.$")
+export EXCH_DMARC=$(nslookup -type=txt _dmarc.$DOMAIN - $NS | grep -E "^v=DMARC1.*")
 export SFB_DIS=$(nslookup -type=cname lyncdiscover.$DOMAIN - $NS | grep -E "webdir\.online\.lync\.com\.$")
 export SFB_SIP=$(nslookup -type=cname sip.$DOMAIN - $NS | grep -E "sipdir\.online\.lync\.com\.$")
 export SFB_SIPDIR=$(nslookup -type=srv _sipfederationtls._tcp.$DOMAIN - $NS | grep -E "100.1.5061.sipfed\.online\.lync\.com\.$")
@@ -52,26 +52,26 @@ else
     exit 1
 fi
 
-#if [ -n "$EXCH_DKIM1" ]; then
-#    echo "The DKIM1 record is set correctly."
-#else
-#    echo "The DKIM1 record is not set correctly."
-#    exit 1
-#fi
-#
-#if [ -n "$EXCH_DKIM2" ]; then
-#    echo "The DKIM2 record is set correctly."
-#else
-#    echo "The DKIM2 record is not set correctly."
-#    exit 1
-#fi
-#
-#if [ -n "$EXCH_DMARC" ]; then
-#    echo "The DMARC record is set correctly."
-#else
-#    echo "The DMARC record is not set correctly."
-#    exit 1
-#fi
+if [ -n "$EXCH_DKIM1" ]; then
+    echo "The DKIM1 record is set correctly."
+else
+    echo "The DKIM1 record is not set correctly."
+    exit 1
+fi
+
+if [ -n "$EXCH_DKIM2" ]; then
+    echo "The DKIM2 record is set correctly."
+else
+    echo "The DKIM2 record is not set correctly."
+    exit 1
+fi
+
+if [ -n "$EXCH_DMARC" ]; then
+    echo "The DMARC record is set correctly."
+else
+    echo "The DMARC record is not set correctly."
+    exit 1
+fi
 
 ################################
 # Skype for Business DNS records

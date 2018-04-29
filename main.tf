@@ -57,7 +57,7 @@ resource "aws_route53_record" "spf" {
 }
 
 resource "aws_route53_record" "dmarc" {
-    count   = "${var.enable_exchange && var.enable_dmarc ? 1 : 0}"
+    count   = "${var.enable_exchange && var.enable_dmarc && length(var.dmarc_record) > 0 ? 1 : 0}"
 
     zone_id = "${var.zone_id}"
     name    = "_dmarc"
@@ -67,7 +67,7 @@ resource "aws_route53_record" "dmarc" {
 }
 
 resource "aws_route53_record" "dkim" {
-    count   = "${var.enable_dkim ? length(local.dkim) : 0}"
+    count   = "${var.enable_exchange && var.enable_dkim && length(var.tenant_name) > 0 ? length(local.dkim) : 0}"
 
     zone_id = "${var.zone_id}"
     name    = "${lookup(local.dkim[count.index], "name")}"
