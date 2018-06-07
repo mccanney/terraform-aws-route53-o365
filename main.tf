@@ -3,22 +3,54 @@ provider "template" {
 }
 
 data "template_file" "domain_guid" {
-    template = "${replace("${var.domain}", ".", "-")}"
+    template = "${replace(var.domain, ".", "-")}"
 }
 
 locals {
-    o365_mx   = "10 ${data.template_file.domain_guid.rendered}.mail.protection.outlook.com"
+    o365_mx   = "${format("10 %s.mail.protection.outlook.com", data.template_file.domain_guid.rendered)}"
     o365_spf  = "v=spf1 include:spf.protection.outlook.com -all"
-    dkim_dom  = "${data.template_file.domain_guid.rendered}._domainkey.${var.tenant_name}.onmicrosoft.com"
+    dkim_dom  = "${format("%s._domainkey.%s.onmicrosoft.com", data.template_file.domain_guid.rendered, var.tenant_name)}"
     dkim = [
         {
-            name  = "selector1._domainkey.${var.domain}"
-            value = "selector1-${local.dkim_dom}"
+            name  = "${format("selector1._domainkey.%s", var.domain)}"
+            value = "${format("selector1-%s", local.dkim_dom)}"
         },
         {
-            name  = "selector2._domainkey.${var.domain}"
-            value = "selector2-${local.dkim_dom}"
+            name  = "${format("selector2._domainkey.%s", var.domain)}"
+            value = "${format("selector2-%s", local.dkim_dom)}"
         },
+    ]
+    sfb = [
+        {
+            name   = "lyncdiscover"
+            record = "webdir.online.lync.com"
+            type   = "CNAME"
+        },
+        {
+            name   = "sip"
+            record = "sipdir.online.lync.com"
+            type   = "CNAME"
+        },
+        {
+            name   = "_sipfederationtls._tcp"
+            record = "100 1 5061 sipfed.online.lync.com"
+            type   = "SRV"
+        },
+        {
+            name   = "_sip._tls"
+            record = "100 1 443 sipdir.online.lync.com"
+            type   = "SRV"
+        }
+    ]
+    mdm = [
+        {
+            name   = "enterpriseregistration"
+            record = "enterpriseregistration.windows.net"
+        },
+        {
+            name   = "enterpriseenrollment"
+            record = "enterpriseenrollment.manage.microsoft.com"
+        }
     ]
 }
 
@@ -27,11 +59,21 @@ locals {
 #################
 
 resource "aws_route53_record" "mx" {
-    count   = "${var.enable_exchange ? 1 : 0}"
+    count   = "${var.enable_exchange && var.enable_custom_mx < 1 ? 1 : 0}"
 
     zone_id = "${var.zone_id}"
     name    = ""
     records = ["${local.o365_mx}"]
+    type    = "MX"
+    ttl     = "${var.ttl}"
+}
+
+resource "aws_route53_record" "custom_mx" {
+    count   = "${var.enable_exchange && var.enable_custom_mx && length(var.custom_mx_record) > 0 ? 1 : 0}"
+
+    zone_id = "${var.zone_id}"
+    name    = ""
+    records = ["${var.custom_mx_record}"]
     type    = "MX"
     ttl     = "${var.ttl}"
 }
@@ -80,43 +122,13 @@ resource "aws_route53_record" "dkim" {
 # Skype for Business
 ####################
 
-resource "aws_route53_record" "lyncdiscover" {
-    count   = "${var.enable_sfb ? 1 : 0}"
+resource "aws_route53_record" "sfb" {
+    count   = "${var.enable_sfb ? length(local.sfb) : 0}"
 
     zone_id = "${var.zone_id}"
-    name    = "lyncdiscover"
-    records = ["webdir.online.lync.com"]
-    type    = "CNAME"
-    ttl     = "${var.ttl}"
-}
-
-resource "aws_route53_record" "sip" {
-    count   = "${var.enable_sfb ? 1 : 0}"
-
-    zone_id = "${var.zone_id}"
-    name    = "sip"
-    records = ["sipdir.online.lync.com"]
-    type    = "CNAME"
-    ttl     = "${var.ttl}"
-}
-
-resource "aws_route53_record" "sipfed" {
-    count   = "${var.enable_sfb ? 1 : 0}"
-
-    zone_id = "${var.zone_id}"
-    name    = "_sipfederationtls._tcp"
-    records = ["100 1 5061 sipfed.online.lync.com"]
-    type    = "SRV"
-    ttl     = "${var.ttl}"
-}
-
-resource "aws_route53_record" "sipdir" {
-    count   = "${var.enable_sfb ? 1 : 0}"
-
-    zone_id = "${var.zone_id}"
-    name    = "_sip._tls"
-    records = ["100 1 443 sipdir.online.lync.com"]
-    type    = "SRV"
+    name    = "${lookup(local.sfb[count.index], "name")}"
+    records = ["${lookup(local.sfb[count.index], "record")}"]
+    type    = "${lookup(local.sfb[count.index], "type")}"
     ttl     = "${var.ttl}"
 }
 
@@ -124,22 +136,12 @@ resource "aws_route53_record" "sipdir" {
 # Mobile Device Management
 ##########################
 
-resource "aws_route53_record" "enterpriseregistration" {
-    count   = "${var.enable_mdm ? 1 : 0}"
+resource "aws_route53_record" "mdm" {
+    count   = "${var.enable_mdm ? length(local.mdm) : 0}"
 
     zone_id = "${var.zone_id}"
-    name    = "enterpriseregistration"
-    records = ["enterpriseregistration.windows.net"]
-    type    = "CNAME"
-    ttl     = "${var.ttl}"
-}
-
-resource "aws_route53_record" "enterpriseenrollment" {
-    count   = "${var.enable_mdm ? 1 : 0}"
-
-    zone_id = "${var.zone_id}"
-    name    = "enterpriseenrollment"
-    records = ["enterpriseenrollment.manage.microsoft.com"]
+    name    = "${lookup(local.mdm[count.index], "name")}"
+    records = ["${lookup(local.mdm[count.index], "record")}"]
     type    = "CNAME"
     ttl     = "${var.ttl}"
 }

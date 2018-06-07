@@ -52,3 +52,13 @@ variable "dmarc_record" {
     description = "The value of the DMARC record."
     default     = ""
 }
+
+variable "enable_custom_mx" {
+    description = "Controls whether a custom MX record should be created instead of the O365 default."
+    default     = false
+}
+
+variable "custom_mx_record" {
+    description = "The value of the custom MX record to create."
+    default     = ""
+}
