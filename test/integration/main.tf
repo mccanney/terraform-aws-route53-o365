@@ -26,6 +26,6 @@ module "route53-o365" {
     ms_txt       = "ms12345678"
     enable_dkim  = true
     enable_dmarc = true
-    dmarc_record = "v=DMARC1; p=none; rua=mailto:dmarc@tiguard.technology; ruf=mailto:dmarc@tiguard.technology"
-    tenant_name  = "tiguard"
+    dmarc_record = "v=DMARC1; p=reject; rua=mailto:dmarc@tiguard.technology; ruf=mailto:dmarc@tiguard.technology; adkim=s; aspf=s;"
+    tenant_name  = "${var.tenant_name}"
 }

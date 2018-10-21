@@ -10,7 +10,7 @@ data "aws_route53_zone" "zone" {
 }
 
 module "route53_o365" {
-    source = "tiguard/route53-o365/aws"
+    source = "mccanney/route53-o365/aws"
 
     domain          = "example.com"
     zone_id         = "${data.aws_route53_zone.zone.zone_id}"
@@ -33,7 +33,7 @@ data "aws_route53_zone" "zone" {
 }
 
 module "route53_o365" {
-    source = "tiguard/route53-o365/aws"
+    source = "mccanney/route53-o365/aws"
 
     domain          = "example.com"
     zone_id         = "${data.aws_route53_zone.zone.zone_id}"

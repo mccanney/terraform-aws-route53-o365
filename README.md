@@ -1,8 +1,8 @@
 # AWS Office 365 Route53 Terraform Module
 
-[![CircleCI](https://circleci.com/gh/tiguard/terraform-aws-route53-o365.svg?style=shield)](https://circleci.com/gh/tiguard/terraform-aws-route53-o365)
-[![GitHub release](https://img.shields.io/github/release/tiguard/terraform-aws-route53-o365.svg?style=flat-square)](https://github.com/tiguard/terraform-aws-route53-o365/releases)
-[![license](https://img.shields.io/github/license/tiguard/terraform-aws-route53-o365.svg?style=flat-square)](https://github.com/tiguard/terraform-aws-route53-o365/blob/master/LICENSE.md)
+[![CircleCI](https://circleci.com/gh/mccanney/terraform-aws-route53-o365.svg?style=shield)](https://circleci.com/gh/mccanney/terraform-aws-route53-o365)
+[![GitHub release](https://img.shields.io/github/release/mccanney/terraform-aws-route53-o365.svg?style=flat-square)](https://github.com/mccanney/terraform-aws-route53-o365/releases)
+[![license](https://img.shields.io/github/license/mccanney/terraform-aws-route53-o365.svg?style=flat-square)](https://github.com/mccanney/terraform-aws-route53-o365/blob/master/LICENSE.md)
 
 A terraform module which creates, in AWS Route53, the [DNS records](https://support.office.com/article/External-Domain-Name-System-records-for-Office-365-c0531a6f-9e25-4f2d-ad0e-a70bfef09ac0) required by Office 365.
 
@@ -10,7 +10,7 @@ A terraform module which creates, in AWS Route53, the [DNS records](https://supp
 
 ```hcl
 module "route53_o365" {
-    source = "tiguard/route53-o365/aws"
+    source = "mccanney/route53-o365/aws"
 
     domain           = "example.com"
     zone_id          = "${data.aws_route53_zone.zone_name.zone_id}"
@@ -41,7 +41,7 @@ module "route53_o365" {
 
 ## Contributing
 
-Please use the [issue tracker](https://github.com/tiguard/terraform-aws-route53-o365/issues) to file any bug reports or make feature requests.
+Please use the [issue tracker](https://github.com/mccanney/terraform-aws-route53-o365/issues) to file any bug reports or make feature requests.
 
 ## License
 
