@@ -62,3 +62,13 @@ variable "custom_mx_record" {
     description = "The value of the custom MX record to create."
     default     = ""
 }
+
+variable "enable_spf" {
+    description = "Controls whether SPF should be included in the root TXT record."
+    default     = false
+}
+
+variable "custom_spf_includes" {
+    description = "If SPF is enabled this is a list of extra include statements."
+    default     = []
+}

@@ -1,10 +1,7 @@
 locals {
     domain_guid = replace(var.domain, ".", "-")
-}
-
-locals {
     o365_mx   = format("0 %s.mail.protection.outlook.com", local.domain_guid)
-    o365_spf  = "v=spf1 include:spf.protection.outlook.com -all"
+    o365_spf  = "include:spf.protection.outlook.com"
     dkim_dom  = format("%s._domainkey.%s.onmicrosoft.com", local.domain_guid, var.tenant_name)
     dkim = [
         {
@@ -84,12 +81,18 @@ resource "aws_route53_record" "autodiscover" {
     ttl     = var.ttl
 }
 
-resource "aws_route53_record" "spf" {
-    count   = var.enable_exchange && length(var.ms_txt) > 0 ? 1 : 0
+locals {
+    ms_verification_text = length(var.ms_txt) > 0 ? "MS=${var.ms_txt}" : null
+    full_spf             = var.enable_spf ? join(" ", concat(["v=spf1", local.o365_spf], var.custom_spf_includes, ["-all"])) : null
+    root_txt_values      = compact([local.ms_verification_text, local.full_spf])
+}
 
+resource "aws_route53_record" "root_txt" {
+    count   = length(local.root_txt_values) > 0 ? 1 : 0
+
+    records = local.root_txt_values
     zone_id = var.zone_id
     name    = ""
-    records = ["MS=${var.ms_txt}","${local.o365_spf}"]
     type    = "TXT"
     ttl     = var.ttl
 }
